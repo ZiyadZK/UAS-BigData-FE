@@ -207,7 +207,7 @@ export default function Home() {
               />
             </div>
             <div className="flex items-center gap-5">
-              <Button disabled={prediction.status !== 'fetched' && prediction.status !== 'error' } type="submit" variant="contained" startIcon={<Search fontSize="small" />}>
+              <Button disabled={prediction.status === 'fetched' && prediction.status === 'error' } type="submit" variant="contained" startIcon={<Search fontSize="small" />}>
                 <div className={`${nunito.className}`}>
                   Predict
                 </div>
