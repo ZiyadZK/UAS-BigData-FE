@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
       <body
         className={`antialiased`}
       >
-        <AppRouterCacheProvider>
+        <AppRouterCacheProvider options={{ key: 'css',  enableCssLayer: false}}>
           {children}
         </AppRouterCacheProvider>
       </body>

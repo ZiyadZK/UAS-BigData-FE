@@ -2,8 +2,9 @@
 
 import { CustomTabItem, CustomTabs } from "@/components/CustomTabs";
 import { nunito } from "@/libs/fonts";
-import { Check, Close, Refresh, Restore, Score, Search, Warning } from "@mui/icons-material";
+import { Check, Close, Refresh, Restore, Score, Search, Summarize, Warning } from "@mui/icons-material";
 import { Autocomplete, Button, LinearProgress, TextField } from "@mui/material";
+import { PieChart } from "@mui/x-charts";
 import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import { useState } from "react";
@@ -17,7 +18,8 @@ export default function Home() {
     probabilities: {
       survived: 0,
       not_survived: 0
-    }
+    },
+    alasan: ''
   })
 
   const [form, setForm] = useState({
@@ -61,21 +63,24 @@ export default function Home() {
 
           console.log(payload)
 
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/predict?model=${form.model['value']}`, payload)
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/predict`, payload)
 
           setPrediction(state => ({
             ...state,
             status: 'fetched',
             survived: response.data.survived,
-            probabilities: response.data.probabilities
+            probabilities: response.data.probabilities,
+            alasan: response.data.alasan
           }))
         } catch (error) {
           if(error instanceof Error) {
+            console.log(error)
             Swal.fire({
               title: 'Error',
               text: error.message
             })
           }else if(error instanceof AxiosError) {
+            console.log(error.response)
             Swal.fire({
               title: 'Error',
               text: error.response.data?.error
@@ -98,35 +103,6 @@ export default function Home() {
           <CustomTabItem label="PREDIKSI">
             <form onSubmit={(e) => aksi.form.submit(e)} className="p-5 rounded-xl bg-white shadow-xl">
               <div className="space-y-5">
-                <div className="grid grid-cols-3 gap-5">
-                  <div className="flex items-center">
-                    Model
-                  </div>
-                  <div className="flex items-center col-span-2">
-                    <Autocomplete
-                      disablePortal
-                      fullWidth
-                      options={[
-                        {
-                          label: 'Gaussian Naive Bayes', value: 'gaussiannb_model'
-                        },
-                        {
-                          label: 'Logistic Regression', value: 'logistic_regression_model'
-                        },
-                        {
-                          label: 'SVM Model', value: 'svm_model'
-                        },
-                        {
-                          label: 'k-NN Model', value: 'knn_model'
-                        }
-                      ]}
-                      getOptionLabel={(v) => v['label']}
-                      value={form['model']}
-                      onChange={(e, value) => aksi.form.set('model', value)}
-                      renderInput={(params) => <TextField {...params} required label="Pilih Model" />}
-                    />
-                  </div>
-                </div>
                 <div className="grid grid-cols-2 gap-5">
                   <Autocomplete 
                     fullWidth
@@ -251,6 +227,15 @@ export default function Home() {
                           </p>
                         </div>
                       )}
+                      {prediction.alasan && (
+                        <div className="flex justify-center items-center">
+                          <div className="px-3 py-2 rounded-xl bg-zinc-50">
+                            <p className="text-center">
+                              {prediction.alasan}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                       <hr className="my-5" />
                       <div className="space-y-2">
                         <div className="grid grid-cols-12 gap-5">
@@ -302,7 +287,24 @@ export default function Home() {
           </CustomTabItem>
           <CustomTabItem label="VISUALISASI">
             <div className="p-5 bg-white rounded-xl">
-              Halaman Visualisasi
+              <div className="flex items-center gap-5">
+                <Summarize />
+                <h1 className="text-lg">
+                  Data Summary
+                </h1>
+              </div>
+              <hr className="my-3" />
+              <div className="flex flex-col items-center gap-10">
+                <div className="w-full">
+                  
+                </div>
+                <div className="w-full">
+                  
+                </div>
+                <div className="w-full">
+                  
+                </div>
+              </div>
             </div>
           </CustomTabItem>
         </CustomTabs>
