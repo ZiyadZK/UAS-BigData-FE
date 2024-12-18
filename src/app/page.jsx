@@ -2,8 +2,8 @@
 
 import { CustomTabItem, CustomTabs } from "@/components/CustomTabs";
 import { nunito } from "@/libs/fonts";
-import { Check, Close, Refresh, Restore, Score, Search, Summarize, Warning } from "@mui/icons-material";
-import { Autocomplete, Button, LinearProgress, TextField } from "@mui/material";
+import { Check, Class, Close, CurrencyPound, Money, Person2, Refresh, Restore, Score, Search, Summarize, Warning } from "@mui/icons-material";
+import { Autocomplete, Button, InputAdornment, LinearProgress, TextField } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import axios, { AxiosError } from "axios";
 import Image from "next/image";
@@ -145,6 +145,7 @@ export default function Home() {
                       value={form['Passenger Class']}
                       onChange={(e, value) => aksi.form.set('Passenger Class', value)}
                       renderInput={(params) => <TextField {...params} required label="Passenger Class" />}
+                      
                     />
                   </div>
                 </div>
@@ -156,6 +157,15 @@ export default function Home() {
                     autoComplete="off"
                     value={form['No of Siblings or Spouses on Board']}
                     onChange={(e) => aksi.form.set('No of Siblings or Spouses on Board', e.target.value)}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment>
+                            <Person2 fontSize="small" />
+                          </InputAdornment>
+                        )
+                      }
+                    }}
                   />
                   <TextField 
                     required
@@ -164,6 +174,15 @@ export default function Home() {
                     autoComplete="off"
                     value={form['No of Parents or Children on Board']}
                     onChange={(e) => aksi.form.set('No of Parents or Children on Board', e.target.value)}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment>
+                            <Person2 fontSize="small" />
+                          </InputAdornment>
+                        )
+                      }
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-5">
@@ -192,6 +211,15 @@ export default function Home() {
                     autoComplete="off"
                     value={form['Passenger Fare']}
                     onChange={(e) => aksi.form.set('Passenger Fare', e.target.value)}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CurrencyPound fontSize="small" />
+                          </InputAdornment>
+                        )
+                      }
+                    }}
                   />
                 </div>
                 <div className="flex items-center gap-5">
